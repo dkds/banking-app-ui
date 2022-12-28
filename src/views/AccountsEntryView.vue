@@ -57,7 +57,7 @@ import {
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import { APIM_SUBSCRIPTION_KEY, API_PATH_ACCOUNT_CREATE, API_PATH_ACCOUNT_GET, API_PATH_ACCOUNT_UPDATE } from '../config';
+import { APIM_SUBSCRIPTION_KEY_HEADER, APIM_SUBSCRIPTION_KEY, API_PATH_ACCOUNT_CREATE, API_PATH_ACCOUNT_GET, API_PATH_ACCOUNT_UPDATE } from '../config';
 
 const route = useRoute()
 const router = useRouter()
