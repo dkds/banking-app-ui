@@ -9,7 +9,7 @@
       <MDBRow class="mb-4">
         <MDBCol>
           <MDBInput type="text" label="Customer ID" id="form6FirstName" v-model="account.customerId" required
-            :readonly="!!customerId" />
+            :readonly="!!customerId || edit" />
         </MDBCol>
         <MDBCol />
         <MDBCol />
@@ -17,10 +17,12 @@
 
       <MDBRow class="mb-4">
         <MDBCol>
-          <MDBInput type="number" label="Balance" id="form6FirstName" v-model="account.balance" required />
+          <MDBInput type="number" label="Balance" id="form6FirstName" v-model="account.balance" required
+            :readonly="edit" />
         </MDBCol>
         <MDBCol>
-          <MDBInput type="text" label="Currency" id="form6LastName" v-model="account.currency" required />
+          <MDBInput type="text" label="Currency" id="form6LastName" v-model="account.currency" required
+            :readonly="edit" />
         </MDBCol>
         <MDBCol />
       </MDBRow>
@@ -51,7 +53,7 @@
 
 <script setup>
 import {
-MDBBtn, MDBCheckbox, MDBCol, MDBContainer, MDBInput, MDBRow
+  MDBBtn, MDBCheckbox, MDBCol, MDBContainer, MDBInput, MDBRow
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
@@ -78,15 +80,19 @@ if (edit.value) {
 
 const checkForm = (event) => {
   event.target.classList.add("was-validated");
-  save()
+  const hasErrors = Array.from(event.target.elements).some(element => element.validationMessage);
+  if (!hasErrors) {
+    save()
+  }
 };
 
 async function loadAccount(id) {
-  const response = await fetch(API_PATH_ACCOUNT_GET + id, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(API_PATH_ACCOUNT_GET + id, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   const accountResponse = await response.json();
   account.value = {
     ...accountResponse,
   }
+  accountStatus.value = account.value.status === 0;
   console.log(account.value);
 }
 
@@ -103,12 +109,12 @@ async function save() {
     method: edit.value ? 'PUT' : 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY
+      [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY
     },
     body: JSON.stringify(payload),
   })
   if (response.ok) {
-    router.push({ name: customerId ? 'customer-accounts-list' : 'accounts-list', params: { customerId } })
+    router.push({ name: customerId.value ? 'customer-accounts-list' : 'accounts-list', params: { customerId: customerId.value } })
   } else {
     const body = await response.text();
     alert(body)

@@ -68,7 +68,7 @@ import {
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import { API_PATH_CUSTOMER_GET, API_PATH_CUSTOMER_CREATE, API_PATH_CUSTOMER_UPDATE, APIM_SUBSCRIPTION_KEY } from '../config'
+import { APIM_SUBSCRIPTION_KEY_HEADER, API_PATH_CUSTOMER_GET, API_PATH_CUSTOMER_CREATE, API_PATH_CUSTOMER_UPDATE, APIM_SUBSCRIPTION_KEY } from '../config'
 
 const route = useRoute()
 const router = useRouter()
@@ -86,20 +86,21 @@ const customer = ref({
 const customerId = ref(route.params.id)
 const edit = ref(!!route.params.id)
 const datePickerState = ref()
-const form = ref()
 
 if (edit.value) {
   loadCustomer(customerId.value)
 }
 
 const checkForm = (event) => {
-  console.log(form.value.$el);
   event.target.classList.add("was-validated");
-  save()
+  const hasErrors = Array.from(event.target.elements).some(element => element.validationMessage);
+  if (!hasErrors) {
+    save()
+  }
 };
 
 async function loadCustomer(id) {
-  const response = await fetch(API_PATH_CUSTOMER_GET + id, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(API_PATH_CUSTOMER_GET + id, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   const customerResponse = await response.json();
   customer.value = {
     ...customerResponse,
@@ -121,7 +122,7 @@ async function save() {
     method: edit.value ? 'PUT' : 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY
+      [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY
     },
     body: JSON.stringify(payload),
   })

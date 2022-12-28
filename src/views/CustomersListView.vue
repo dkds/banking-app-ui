@@ -56,7 +56,7 @@ import {
 import { ref, watch } from 'vue';
 import { DateTime } from 'luxon';
 import { useRouter } from 'vue-router';
-import { API_PATH_CUSTOMER_LIST, APIM_SUBSCRIPTION_KEY } from '../config'
+import { APIM_SUBSCRIPTION_KEY_HEADER, API_PATH_CUSTOMER_LIST, APIM_SUBSCRIPTION_KEY } from '../config'
 
 const router = useRouter()
 
@@ -64,7 +64,7 @@ const customersList = ref([])
 loadCustomers()
 
 async function loadCustomers() {
-  const response = await fetch(API_PATH_CUSTOMER_LIST, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(API_PATH_CUSTOMER_LIST, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   customersList.value = await response.json();
   console.log(customersList.value);
 }

@@ -11,7 +11,8 @@
           <MDBInput type="text" label="From Account Number" id="form6FirstName"
             v-model="transaction.accountNumberFrom" />
         </MDBCol>
-        <MDBCol>
+        <MDBCol class="d-flex align-items-center">
+          <span>Leave empty for deposit transactions</span>
         </MDBCol>
         <MDBCol />
       </MDBRow>
@@ -20,7 +21,9 @@
         <MDBCol>
           <MDBInput type="text" label="To Account Number" id="form6FirstName" v-model="transaction.accountNumberTo" />
         </MDBCol>
-        <MDBCol />
+        <MDBCol class="d-flex align-items-center">
+          <span>Leave empty for cashout transactions</span>
+        </MDBCol>
         <MDBCol />
       </MDBRow>
 
@@ -63,7 +66,7 @@ import {
 } from "mdb-vue-ui-kit";
 import { ref } from "vue";
 import { useRoute, useRouter } from 'vue-router';
-import { APIM_SUBSCRIPTION_KEY, API_PATH_TRANSACTION_CREATE, API_PATH_TRANSACTION_GET, API_PATH_TRANSACTION_UPDATE } from '../config';
+import { APIM_SUBSCRIPTION_KEY_HEADER, APIM_SUBSCRIPTION_KEY, API_PATH_TRANSACTION_CREATE, API_PATH_TRANSACTION_GET, API_PATH_TRANSACTION_UPDATE } from '../config';
 
 const route = useRoute()
 const router = useRouter()
@@ -84,11 +87,14 @@ if (edit.value) {
 
 const checkForm = (event) => {
   event.target.classList.add("was-validated");
-  save()
+  const hasErrors = Array.from(event.target.elements).some(element => element.validationMessage);
+  if (!hasErrors) {
+    save()
+  }
 };
 
 async function loadTransaction(id) {
-  const response = await fetch(API_PATH_TRANSACTION_GET + id, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(API_PATH_TRANSACTION_GET + id, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   const transactionResponse = await response.json();
   transaction.value = {
     ...transactionResponse,
@@ -117,7 +123,7 @@ async function save() {
     method: edit.value ? 'PUT' : 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY
+      [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY
     },
     body: JSON.stringify(payload),
   })

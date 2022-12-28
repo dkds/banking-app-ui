@@ -1,5 +1,6 @@
 export const BASE_URL = 'https://k2284425-sapm-cw1.azure-api.net/'
 export const APIM_SUBSCRIPTION_KEY = 'b74d72af70e74046a56932720bfe7e0a'
+export const APIM_SUBSCRIPTION_KEY_HEADER = 'Ocp-Apim-Subscription-Key'
 
 export const API_PATH_CUSTOMER_LIST = BASE_URL + 'customer-service/Customers'
 export const API_PATH_CUSTOMER_CREATE = BASE_URL + 'customer-service/Customers'

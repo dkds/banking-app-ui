@@ -59,7 +59,7 @@ import {
 } from 'mdb-vue-ui-kit';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { APIM_SUBSCRIPTION_KEY, API_PATH_ACCOUNT_LIST, API_PATH_ACCOUNT_LIST_BY_CUSTOMER } from '../config';
+import { APIM_SUBSCRIPTION_KEY_HEADER, APIM_SUBSCRIPTION_KEY, API_PATH_ACCOUNT_LIST, API_PATH_ACCOUNT_LIST_BY_CUSTOMER } from '../config';
 
 const router = useRouter()
 const route = useRoute()
@@ -77,7 +77,7 @@ async function loadAccounts() {
     apiPath = API_PATH_ACCOUNT_LIST
   }
 
-  const response = await fetch(apiPath, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(apiPath, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   const accountsResponse = await response.json();
 
   accountsList.value = accountsResponse.map((account => ({

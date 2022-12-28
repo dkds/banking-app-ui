@@ -55,7 +55,7 @@ import {
 } from 'mdb-vue-ui-kit';
 import { ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { APIM_SUBSCRIPTION_KEY, API_PATH_TRANSACTION_LIST } from '../config';
+import { APIM_SUBSCRIPTION_KEY_HEADER, APIM_SUBSCRIPTION_KEY, API_PATH_TRANSACTION_LIST } from '../config';
 
 const router = useRouter()
 const route = useRoute()
@@ -75,7 +75,7 @@ async function loadAccounts() {
     apiPath = API_PATH_TRANSACTION_LIST
   }
 
-  const response = await fetch(apiPath, { headers: { 'Ocp-Apim-Subscription-Key': APIM_SUBSCRIPTION_KEY } })
+  const response = await fetch(apiPath, { headers: { [APIM_SUBSCRIPTION_KEY_HEADER]: APIM_SUBSCRIPTION_KEY } })
   const transactionsResponse = await response.json();
 
   transactionsList.value = transactionsResponse.map((transaction => ({
