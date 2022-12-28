@@ -1,0 +1,4 @@
+D:\Projects\cs\banking-app-ui\obj\Debug\banking-app-ui.esproj.SuggestedBindingRedirects.cache
+D:\Projects\cs\banking-app-ui\obj\Debug\banking-app-ui.esproj.CoreCompileInputs.cache
+D:\Projects\cs\BankSystem\banking-app-ui\obj\Debug\banking-app-ui.esproj.SuggestedBindingRedirects.cache
+D:\Projects\cs\BankSystem\banking-app-ui\obj\Debug\banking-app-ui.esproj.CoreCompileInputs.cache
